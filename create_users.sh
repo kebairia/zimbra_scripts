@@ -4,10 +4,16 @@ DATA=./users_db_test.csv
 NUM_USERS=$(wc -l $DATA | awk '{print $1}')
 # FUNCTIONS
 # generate users info {{{1
+echo_error(){
+    echo -e '\e[5;31mERR:\e[0m' $1
+}
+echo_info(){
+    echo -e "\e[0;33mINFO:\e[0m" $1
+}
 generate_users_info(){
-    echo "+-----------------------+"
-    echo "| GENERATING USERS INFO |"
-    echo "+-----------------------+"
+    echo "┏━━━━━━━━━━━━━━━━━━━━━━━┓"
+    echo "┃ GENERATING USERS INFO ┃"
+    echo "┗━━━━━━━━━━━━━━━━━━━━━━━┛"
 
 }
 #}}}
@@ -16,18 +22,18 @@ create_users(){
     #
     #Function to create users listed in ${DATA} file and force users to change their password at first login
     #
-    echo "+----------------+"
-    echo "| CREATING USERS |"
-    echo "+----------------+"
+    echo "┏━━━━━━━━━━━━━━━━━┓"
+    echo "┃ CREATING USERS  ┃"
+    echo "┗━━━━━━━━━━━━━━━━━┛"
 
     index=1
     while read line; do
 
         # Mandatory
         uid=$(echo $line | awk -F ',' '{print $1}') && uid=${uid#*:} && [ -z $uid ] \
-            && echo "ERR: UID is mandatory" && exit 1
+            && echo_error "UID is missing for account number ${index}, this field is mandatory...exiting"  && exit 1
         pass=$(echo $line | awk -F ',' '{print $6}') && pass=${pass#*:} && [ -z $pass ] \
-            && echo "ERR: password is mandatory"  && exit 2
+            && echo_error "password is missing for ${uid}, this field is mandatory...exiting"  && exit 2
         # Optional 
         id_cn=''
         cn=$(echo $line | awk -F ',' '{print $2}') && cn=${cn#*:} && [ ! -z $cn ] && id_cn='cn'
@@ -39,9 +45,9 @@ create_users(){
         id_zas=''
         zas=$(echo $line | awk -F ',' '{print $5}') && zas=${zas#*:} && [ ! -z $zas ] && id_zas='zimbraAccountStatus'
 
-        echo -n "[$index/${NUM_USERS}]:Creating $uid UID: " \
+        echo -en "[$index/${NUM_USERS}]:Creating $uid UID: " \
             && zmprov ca $uid $pass $id_cn "$cn" $id_displayName "$displayName" $id_sn "$sn" $id_zas $zas \
-            && zmprov ma ${uid} zimbraPasswordMustChange TRUE   
+            && zmprov ma ${uid} zimbraPasswordMustChange TRUE
 
             index=$((index+1))
     done < $DATA | tee script.log
@@ -51,6 +57,9 @@ create_users(){
 #}}}
 # dump users info {{{1
 dump_users_info(){
+    echo "┏━━━━━━━━━━━━━━━━━┓"
+    echo "┃ DUMP USERS INFO ┃"
+    echo "┗━━━━━━━━━━━━━━━━━┛"
     cat $DATA | awk -F"," '{print $1, $NF}' | sed 's/uid/ACCOUNT/;s/pass/PASS/' > users_info.txt
 
 }
@@ -68,6 +77,7 @@ OPTION
 EOF
 }
 #}}}
+
 while [ ! -z $1 ]; do
     case $1 in
         -i | --users-info ) generate_users_info ;;
