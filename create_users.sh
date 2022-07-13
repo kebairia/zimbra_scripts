@@ -1,7 +1,7 @@
 #!/bin/env bash
 #CONSTANTS
 DATA=./users_db_test.csv
-NUM_USERS=$(wc -l $DATA)
+NUM_USERS=$(wc -l $DATA | awk '{print $1}')
 # FUNCTIONS
 # generate users info {{{1
 generate_users_info(){
@@ -35,10 +35,13 @@ create_users(){
         id_zas=''
         zas=$(echo $line | awk -F ',' '{print $5}') && zas=${zas#*:} && [ ! -z $zas ] && id_zas='zimbraAccountStatus'
 
-        echo "[$index/${NUM_USERS}]:Creating $uid UID: " \
+        echo -n "[$index/${NUM_USERS}]:Creating $uid UID: " \
             && zmprov ca $uid $pass $id_cn "$cn" $id_displayName "$displayName" $id_sn "$sn" $id_zas $zas \
-            && index=index+1
-    done < $DATA
+            # Force user to change password at login
+            && zmprov ma ${uid} zimbraPasswordMustChange TRUE   
+
+            index=$((index+1))
+    done < $DATA | tee script.log
 
 
 }
