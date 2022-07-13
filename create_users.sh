@@ -68,11 +68,15 @@ OPTION
 EOF
 }
 #}}}
-case $1 in
-    --users-info ) generate_users_info ;;
-    --setup-users ) create_users ;;
-    --dump-info ) ;;
-    * ) usage ;;
-esac
+while [ ! -z $1 ]; do
+    case $1 in
+        -i | --users-info ) generate_users_info ;;
+        -s | --setup-users ) create_users ;;
+        -d | --dump-info ) ;;
+        * ) usage ;;
+
+    esac
+    shift
+done
 #ca:a.bourachedi@crstdla.dz,cn:AbdelghaniBourachedi,displayName:AbdelghaniBourachedi,sn:Bourachedi,zimbraAccountStatus:active,pass:f7c3a7972ce37fc8
 # zmprov ca user@domain cn llllll 
