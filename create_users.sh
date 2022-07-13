@@ -22,8 +22,10 @@ create_users(){
     while read line; do
 
         # Mandatory
-        uid=$(echo $line | awk -F ',' '{print $1}') && uid=${uid#*:} && [ -z $uid ] && exit 1
-        pass=$(echo $line | awk -F ',' '{print $6}') && pass=${pass#*:} && [ -z $pass ] && exit 2
+        uid=$(echo $line | awk -F ',' '{print $1}') && uid=${uid#*:} && [ -z $uid ] \
+            && echo "ERR: UID is mandatory" && exit 1
+        pass=$(echo $line | awk -F ',' '{print $6}') && pass=${pass#*:} && [ -z $pass ] \
+            && echo "ERR: password is mandatory"  && exit 2
         # Optional 
         id_cn=''
         cn=$(echo $line | awk -F ',' '{print $2}') && cn=${cn#*:} && [ ! -z $cn ] && id_cn='cn'
