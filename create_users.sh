@@ -1,6 +1,7 @@
 #!/bin/env bash
 #CONSTANTS
-DATA=./users_db.csv
+DATA=./users_db_test.csv
+NUM_USERS=$(wc -l $DATA)
 # FUNCTIONS
 # generate users info {{{1
 generate_users_info(){
@@ -17,10 +18,13 @@ create_users(){
     echo "| CREATING USERS |"
     echo "+----------------+"
 
+    index=1
     while read line; do
 
-        uid=$(echo $line | awk -F ',' '{print $1}') && uid=${uid#*:} && [ ! -z $uid ] && id_uid='ca'
-        pass=$(echo $line | awk -F ',' '{print $6}') && pass=${pass#*:} && [ ! -z $pass ] && id_pass='pass'
+        # Mandatory
+        uid=$(echo $line | awk -F ',' '{print $1}') && uid=${uid#*:} && [ -z $uid ] && exit 1
+        pass=$(echo $line | awk -F ',' '{print $6}') && pass=${pass#*:} && [ -z $pass ] && exit 2
+        # Optional 
         id_cn=''
         cn=$(echo $line | awk -F ',' '{print $2}') && cn=${cn#*:} && [ ! -z $cn ] && id_cn='cn'
         id_displayName=''
@@ -31,7 +35,9 @@ create_users(){
         id_zas=''
         zas=$(echo $line | awk -F ',' '{print $5}') && zas=${zas#*:} && [ ! -z $zas ] && id_zas='zimbraAccountStatus'
 
-        zmprov $id_uid $uid $pass $id_cn "$cn" $id_displayName "$displayName" $id_sn "$sn" $id_zas $zas
+        echo "[$index/${NUM_USERS}]:Creating $uid UID: " \
+            && zmprov ca $uid $pass $id_cn "$cn" $id_displayName "$displayName" $id_sn "$sn" $id_zas $zas \
+            && index=index+1
     done < $DATA
 
 
