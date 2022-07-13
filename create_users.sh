@@ -13,7 +13,9 @@ generate_users_info(){
 #}}}
 #create users {{{1
 create_users(){
-
+    #
+    #Function to create users listed in ${DATA} file and force users to change their password at first login
+    #
     echo "+----------------+"
     echo "| CREATING USERS |"
     echo "+----------------+"
@@ -39,7 +41,6 @@ create_users(){
 
         echo -n "[$index/${NUM_USERS}]:Creating $uid UID: " \
             && zmprov ca $uid $pass $id_cn "$cn" $id_displayName "$displayName" $id_sn "$sn" $id_zas $zas \
-            # Force user to change password at login
             && zmprov ma ${uid} zimbraPasswordMustChange TRUE   
 
             index=$((index+1))
