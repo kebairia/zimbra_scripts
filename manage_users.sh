@@ -60,20 +60,21 @@ dump_users_info(){
     echo "┏━━━━━━━━━━━━━━━━━┓"
     echo "┃ DUMP USERS INFO ┃"
     echo "┗━━━━━━━━━━━━━━━━━┛"
-    cat $DATA | awk -F, '{print $1, $NF}' | sed 's/uid/ACCOUNT/;s/pass/PASS/' > users_info.txt
+    cat $DATA | awk -F, '{print $1, $NF}' | sed 's/uid/ACCOUNT/;s/pass/PASS/' > users_info.txt \
+        && echo_info "Users info are in 'users_info.txt' file"
 
 }
 #}}}
 # usage {{{1
 usage (){
 cat << EOF
-create-users [OPTION]
+$0 [OPTION...]
 
-OPTION
-    --setup-users   create blank users account with random password, (users are forced to change their passwords on first login)
-    --users-info    dump users information (uid and password) in a file
-    --dump-info     dump users information (uid and password) in a file
-    --help          print this help
+OPTIONS
+    -s, --setup-users   create blank users account with random password, (users are forced to change their passwords on first login)
+    -i, --users-info    dump users information (uid and password) in a file
+    -d, --dump-info     dump users information (uid and password) in a file
+    -h, --help          print this help
 EOF
 }
 #}}}
