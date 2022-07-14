@@ -82,7 +82,7 @@ while [ ! -z $1 ]; do
     case $1 in
         -i | --users-info ) generate_users_info ;;
         -s | --setup-users ) create_users ;;
-        -d | --dump-info ) ;;
+        -d | --dump_info ) dump_users_info ;;
         * ) usage ;;
 
     esac
