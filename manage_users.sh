@@ -45,7 +45,7 @@ create_users(){
         id_zas=''
         zas=$(echo $line | awk -F ',' '{print $5}') && zas=${zas#*:} && [ ! -z $zas ] && id_zas='zimbraAccountStatus'
 
-        echo -en "[$index/${NUM_USERS}]:Creating $uid UID: " \
+        echo -n "[${index}/${NUM_USERS}]:Creating $uid UID: " \
             && zmprov ca $uid $pass $id_cn "$cn" $id_displayName "$displayName" $id_sn "$sn" $id_zas $zas \
             && zmprov ma ${uid} zimbraPasswordMustChange TRUE
 
@@ -60,7 +60,7 @@ dump_users_info(){
     echo "┏━━━━━━━━━━━━━━━━━┓"
     echo "┃ DUMP USERS INFO ┃"
     echo "┗━━━━━━━━━━━━━━━━━┛"
-    cat $DATA | awk -F"," '{print $1, $NF}' | sed 's/uid/ACCOUNT/;s/pass/PASS/' > users_info.txt
+    cat $DATA | awk -F, '{print $1, $NF}' | sed 's/uid/ACCOUNT/;s/pass/PASS/' > users_info.txt
 
 }
 #}}}
