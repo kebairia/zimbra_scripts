@@ -1,5 +1,9 @@
 #!/bin/env bash
 #CONSTANTS
+# 
+# ┃           MANAGE USERS            ┃
+# ┃              SCRIPT               ┃
+# 
 DATA=./users_db_test.csv
 NUM_USERS=$(wc -l $DATA | awk '{print $1}')
 # FUNCTIONS
