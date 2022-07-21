@@ -7,18 +7,12 @@
 DATA=./users_db.csv
 NUM_USERS=$(wc -l $DATA | awk '{print $1}')
 # FUNCTIONS
-# generate users info {{{1
+# Helpers {{{1
 echo_error(){
     echo -e '\e[5;31mERR:\e[0m' $1
 }
 echo_info(){
     echo -e "\e[0;33mINFO:\e[0m" $1
-}
-generate_users_info(){
-    echo "┏━━━━━━━━━━━━━━━━━━━━━━━┓"
-    echo "┃ GENERATING USERS INFO ┃"
-    echo "┗━━━━━━━━━━━━━━━━━━━━━━━┛"
-
 }
 #}}}
 #create users {{{1
@@ -76,7 +70,6 @@ $0 [OPTION...]
 
 OPTIONS
     -s, --setup-users   create blank users account with random password, (users are forced to change their passwords on first login)
-    -i, --users-info    dump users information (uid and password) in a file
     -d, --dump-info     dump users information (uid and password) in a file
     -h, --help          print this help
 EOF
@@ -85,7 +78,6 @@ EOF
 
 while [ ! -z $1 ]; do
     case $1 in
-        -i | --users-info ) generate_users_info ;;
         -s | --setup-users ) create_users ;;
         -d | --dump_info ) dump_users_info ;;
         * ) usage ;;
