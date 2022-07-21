@@ -36,7 +36,7 @@ create_users(){
         # Mandatory
         uid=$(echo $line | awk -F ',' '{print $1}') && uid=${uid#*:} && [[ -z $uid ]] \
             && echo_error "UID is missing for account number ${index}, this field is mandatory...exiting"  && exit 1
-        pass=$(echo $line | awk -F ',' '{print $6}') && pass=${pass#*:} && [[ -z $pass ]] \
+        pass=$(echo $line | awk -F ',' '{print $NF}') && pass=${pass#*:} && [[ -z $pass ]] \
             && echo_error "password is missing for ${uid}, this field is mandatory...exiting"  && exit 2
         # Optional 
         id_cn=''
