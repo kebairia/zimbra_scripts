@@ -8,5 +8,5 @@
 #done
 
 while read line; do
-    echo "$(zmprov ga ${line} cn sn displayName company title zimbraMailAlias zimbraMailForwardingAddress mobile pager telephoneNumber co l postalCode st street zimbraAccountStatus | sed "s/\# name/uid:/" | paste -sd',' | tr -d '[:space:]';)""pass:$(openssl rand -hex 8)"
+    echo "$(zmprov ga ${line} cn sn displayName company title zimbraMailAlias zimbraMailForwardingAddress mobile pager telephoneNumber co l postalCode st street zimbraAccountStatus | sed "s/\# name/uid:/" | paste -sd',' | sed 's/:\s/:/g;s/\s,/,/g';)""pass:$(openssl rand -hex 8)"
 done < users
