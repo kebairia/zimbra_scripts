@@ -34,20 +34,20 @@ create_users(){
     while read line; do
 
         # Mandatory
-        uid=$(echo $line | awk -F ',' '{print $1}') && uid=${uid#*:} && [ -z $uid ] \
+        uid=$(echo $line | awk -F ',' '{print $1}') && uid=${uid#*:} && [[ -z $uid ]] \
             && echo_error "UID is missing for account number ${index}, this field is mandatory...exiting"  && exit 1
-        pass=$(echo $line | awk -F ',' '{print $6}') && pass=${pass#*:} && [ -z $pass ] \
+        pass=$(echo $line | awk -F ',' '{print $6}') && pass=${pass#*:} && [[ -z $pass ]] \
             && echo_error "password is missing for ${uid}, this field is mandatory...exiting"  && exit 2
         # Optional 
         id_cn=''
-        cn=$(echo $line | awk -F ',' '{print $2}') && cn=${cn#*:} && [ ! -z $cn ] && id_cn='cn'
+        cn=$(echo $line | awk -F ',' '{print $2}') && cn=${cn#*:} && [[ ! -z $cn ]] && id_cn='cn'
         id_displayName=''
         displayName=$(echo $line | awk -F ',' '{print $3}') && displayName=${displayName#*:} \
-            && [ ! -z $displayName ] && id_displayName='displayName'
+            && [[ ! -z $displayName ]] && id_displayName='displayName'
         id_sn=''
-        sn=$(echo $line | awk -F ',' '{print $4}') && sn=${sn#*:} && [ ! -z $sn ] && id_sn='sn'
+        sn=$(echo $line | awk -F ',' '{print $4}') && sn=${sn#*:} && [[ ! -z $sn ]] && id_sn='sn'
         id_zas=''
-        zas=$(echo $line | awk -F ',' '{print $5}') && zas=${zas#*:} && [ ! -z $zas ] && id_zas='zimbraAccountStatus'
+        zas=$(echo $line | awk -F ',' '{print $5}') && zas=${zas#*:} && [[ ! -z $zas ]] && id_zas='zimbraAccountStatus'
 
         echo -n "[${index}/${NUM_USERS}]:Creating $uid UID: " \
             && zmprov ca $uid $pass $id_cn "$cn" $id_displayName "$displayName" $id_sn "$sn" $id_zas $zas \
