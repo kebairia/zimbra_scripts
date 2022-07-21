@@ -4,7 +4,7 @@
 # ┃           MANAGE USERS            ┃
 # ┃              SCRIPT               ┃
 # 
-DATA=./users_db_test.csv
+DATA=./users_db.csv
 NUM_USERS=$(wc -l $DATA | awk '{print $1}')
 # FUNCTIONS
 # generate users info {{{1
